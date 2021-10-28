@@ -16,7 +16,7 @@
       />
       {{ structure.name }}
     </li>
-    <template v-if="structure.contents">
+    <template v-if="structure.contents && showTree">
       <FileStructureItem
         v-for="child in structure.contents"
         :key="child.name + level"
@@ -24,7 +24,6 @@
         :path="currentPath"
         :selected-path="selectedPath"
         :level="level + 1"
-        v-show="showTree"
         @selected-item="selectedItem($event)"
       />
     </template>
@@ -72,7 +71,7 @@ export default {
       if (this.structure.type === 'directory')
         this.showTree = !this.showTree
 
-      if (this.showTree)
+      if (this.showTree || this.structure.type !== 'directory')
         this.$emit('selected-item', {
           type: this.structure.type,
           path: this.currentPath
